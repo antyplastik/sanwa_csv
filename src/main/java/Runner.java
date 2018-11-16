@@ -7,6 +7,7 @@ public class Runner {
         PClink7CSVfix csVfixer = new PClink7CSVfix(testStr);
 //        System.out.println(csVfixer.parseLine(testStr));
         System.out.println(csVfixer.fixLine());
+//        System.out.println(csVfixer.getFixedLine());
 
     }
 

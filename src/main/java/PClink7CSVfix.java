@@ -7,7 +7,7 @@ public class PClink7CSVfix {
 
     private char defaultSeparator = ',';
     private String line;
-    private ArrayList<String> parametersInLine = new ArrayList<String>();
+    private ArrayList<String> lineStringArray = new ArrayList<String>();
 
     public PClink7CSVfix(String line) {
         this.line = line;
@@ -20,72 +20,39 @@ public class PClink7CSVfix {
 
     public String fixLine() {
         String result = "";
-        if (line != null || line != "" && !parametersInLine.isEmpty()) {
+        if (line != null || line != "" && !lineStringArray.isEmpty()) {
             parseLine(line);
-            result = getFixedLine(fixLineList(parametersInLine));
+            fixLineList(lineStringArray);
+            result = getFixedLine();
 
         }
         return result;
     }
 
     // 00:00:00,5,440000,DCmV,,,2,3700000,oC,,,,,,Measure,,,,Current peak values,,
-    public String parseLine(String readedLine) {
+    public String parseLine(String inputString) {
         String reasultStr = "";
         String tmpStr = "";
-        int strLen = readedLine.length();
+        int strLen = inputString.length();
         int comma = 0;
         int strIndex = 0;
         char currentChar;
-        char nextChar = 0;
-        char nextAfterNextChar = 0;
 
-        do{
-            currentChar = readedLine.charAt(strIndex);
-
-            if (strIndex<strLen -1)
-                nextChar = readedLine.charAt(strIndex+1);
-            if (strIndex < strLen - 2)
-                nextAfterNextChar = readedLine.charAt(strIndex+2);
-
-            if (nextChar == defaultSeparator){
+        for (int i = 0; i < strLen; i++) {
+            currentChar = inputString.charAt(i);
+            if (currentChar == defaultSeparator) {
+                lineStringArray.add(tmpStr);
                 comma++;
-            }
-
-            else if (currentChar != defaultSeparator && nextChar != defaultSeparator && nextAfterNextChar != defaultSeparator){
-
-            }
-
-            else if (currentChar != defaultSeparator && nextChar != defaultSeparator && nextAfterNextChar == defaultSeparator) {
-                parametersInLine.add(tmpStr);
                 tmpStr = "";
-            }
-
-            else if (currentChar != defaultSeparator && nextChar == defaultSeparator) {
+//                if(i !=1)
+//                    tmpStr = "";
+            } else
                 tmpStr = tmpStr + currentChar;
-                parametersInLine.add(tmpStr);
-                tmpStr = "";
-            }
 
-            if ((currentChar >= 48 && currentChar <=57) && (nextChar == defaultSeparator) && (nextAfterNextChar >= 48 && nextAfterNextChar <=57)){ // jezeli liczby dzieli przecinek
-                strIndex++;
-            }
-
-//                tmpStr = tmpStr + currentChar;
-
-
-
-            if (strIndex < strLen -1)
-                strIndex++;
-            else
-                break;
-        } while(true);
+        }
 
 
         System.out.println(comma); // 20 jest prawidlowo
-
-        for (int j = 0; j < comma; j++) {
-
-        }
 
         return reasultStr;
     }
@@ -95,29 +62,62 @@ public class PClink7CSVfix {
         int tmpInt = 0;
         String tmpStr = "";
         String nextStr = "";
+        String nextAfterNextStr = "";
+        int removed = 0;
+        int ifInt;
 //        ArrayList<String> result = new ArrayList<String>();
 
-        for (int i = 0; i < listLen; i++) {
+        for (int i = 0; i < listLen - removed; i++) {
             tmpStr = strList.get(i).toString();
+            if (tmpStr.equals("")) {
+                do {
+                    strList.remove(i);
+                    removed++;
+                    if (i < (listLen - removed) - 1)
+                        nextStr = strList.get(i).toString();
+                } while (nextStr.equals(""));
+                tmpStr = nextStr;
+            }
 
-            if (i == 1) {
+            ifInt = getNumberFromString(tmpStr);
+
+            if ((ifInt > 0) && (ifInt < 10)) {
                 tmpStr = tmpStr + strList.get(i + 1).toString();
                 strList.set(i, tmpStr);
                 strList.remove(i + 1);
-            }
+                removed++;
+            } else if (ifInt == 0)
+                strList.remove(i);
+//            if ((i < (listLen - removed) -1) && tmpStr.equals(','))
+//                strList.add(i+1, defaultSeparator);;
         }
         return strList;
     }
 
+    private int getNumberFromString(String str) {
+        int digit;
+        try {
+            digit = Integer.parseInt(str);
+        } catch (NumberFormatException e) {
+            return -1;
+        }
+        return digit;
+    }
 
-    public String getFixedLine(ArrayList strList) {
-        int arrlen = strList.size();
+
+    public String getFixedLine() {
+        int arrlen = lineStringArray.size();
         String resultStr = "";
+        String currentStr = "";
 
-        for (int i = 9; i < arrlen; i++)
-            if (i > 0) {
-                resultStr = resultStr + defaultSeparator + strList.get(i).toString();
-            }
+        for (int i = 0; i < arrlen; i++) {
+            currentStr = lineStringArray.get(i);
+            if (i > 1)
+                resultStr = resultStr + defaultSeparator + currentStr;
+            else if (i == 0)
+                resultStr = currentStr;
+        }
+
         return resultStr;
     }
 
