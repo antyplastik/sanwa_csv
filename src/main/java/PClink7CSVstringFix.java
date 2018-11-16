@@ -1,27 +1,15 @@
 import java.util.ArrayList;
 
-public class PClink7CSVfix {
-
-    private String newFile = "";
-    private String newFilePath = "";
-
+public class PClink7CSVstringFix {
     private char defaultSeparator = ',';
-    private String line;
     private ArrayList<String> lineStringArray = new ArrayList<String>();
 
-    public PClink7CSVfix(String line) {
-        this.line = line;
-    }
+    public PClink7CSVstringFix() {}
 
-    public PClink7CSVfix(String newFile, String newFilePath) {
-        this.newFile = newFile;
-        this.newFilePath = newFilePath;
-    }
-
-    public String fixLine() {
+    public String fixLine(String inputLine) {
         String result = "";
-        if (line != null || line != "" && !lineStringArray.isEmpty()) {
-            parseLine(line);
+        if (inputLine != null || inputLine != "" && !lineStringArray.isEmpty()) {
+            parseLine(inputLine);
             fixLineList(lineStringArray);
             result = getFixedLine();
 
@@ -30,7 +18,7 @@ public class PClink7CSVfix {
     }
 
     // 00:00:00,5,440000,DCmV,,,2,3700000,oC,,,,,,Measure,,,,Current peak values,,
-    public String parseLine(String inputString) {
+    private String parseLine(String inputString) {
         String reasultStr = "";
         String tmpStr = "";
         int strLen = inputString.length();
@@ -52,12 +40,12 @@ public class PClink7CSVfix {
         }
 
 
-        System.out.println(comma); // 20 jest prawidlowo
+//        System.out.println(comma); // 20 jest prawidlowo
 
         return reasultStr;
     }
 
-    public ArrayList<String> fixLineList(ArrayList strList) {
+    private ArrayList<String> fixLineList(ArrayList strList) {
         int listLen = strList.size();
         int tmpInt = 0;
         String tmpStr = "";
