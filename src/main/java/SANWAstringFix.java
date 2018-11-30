@@ -50,11 +50,11 @@ public class SANWAstringFix {
     public String fixLine() {
         String result = "";
         if (inputString != null || inputString != "") {
-            outputArray = fixLineList(parseLine(inputString));
-            result = getFixedLine(outputArray);
-
+            result = getFixedLine(fixLineList(parseLine(inputString)));
+            return result;
         }
-        return result;
+        else
+            return "[ERROR] Input string is empty";
     }
 
     public ArrayList<String> getOutputArray() {
@@ -109,19 +109,23 @@ public class SANWAstringFix {
                     if (i < (listLen - removed) - 1)
                         nextStr = strList.get(i).toString();
                 } while (nextStr.equals(""));
-                tmpStr = strList.get(i).toString();
             }
 
-            ifInt = getNumberFromString(tmpStr);
+            if (i < listLen - removed) {
+                tmpStr = strList.get(i).toString();
+                ifInt = getNumberFromString(tmpStr);
 
-            if ((ifInt > 0) && (ifInt < 10)) {
-                tmpStr = tmpStr + strList.get(i + 1).toString();
-                strList.set(i, tmpStr);
-                strList.remove(i + 1);
-                removed++;
-            } else if (ifInt == 0) {
-                strList.remove(i);
-                removed++;
+                if ((ifInt > 0) && (ifInt < 10)) {                      //for single digit in front of next large number
+                    tmpStr = tmpStr + strList.get(i + 1).toString();
+                    strList.set(i, tmpStr);
+                    strList.remove(i + 1);
+                    removed++;
+                } else if (ifInt == 0) {
+                    tmpStr = strList.get(i-1).toString();
+                    strList.set(i-1, tmpStr + tmpInt);
+                    strList.remove(i);
+                    removed++;
+                }
             }
 //            if ((i < (listLen - removed) -1) && tmpStr.equals(','))
 //                strList.add(i+1, defaultSeparator);;
