@@ -53,7 +53,7 @@ public class CSV {
         String line = "";
         String tmpString;
         int lineIndex = 0;
-//        SANWAstringFix fixStr = new SANWAstringFix();
+//        StringFix fixStr = new StringFix();
         while (line != null) {
             try {
                 line = bufferedReader.readLine();

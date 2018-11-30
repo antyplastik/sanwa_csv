@@ -1,16 +1,16 @@
 import java.util.ArrayList;
 
-public class SANWAstringFix {
+public class StringFix {
     private char defaultSeparator = ',';
     String inputString;
 
     private ArrayList<String> outputArray;
 
-    public SANWAstringFix() {
+    public StringFix() {
         this.outputArray = new ArrayList<String>();
     }
 
-    public SANWAstringFix(String inputString) {
+    public StringFix(String inputString) {
         this.inputString = inputString;
         this.outputArray = new ArrayList<String>();
     }
@@ -115,12 +115,12 @@ public class SANWAstringFix {
                 tmpStr = strList.get(i).toString();
                 ifInt = getNumberFromString(tmpStr);
 
-                if ((ifInt > 0) && (ifInt < 10)) {                      //for single digit in front of next large number
+                if ((ifInt > 0) && (ifInt < 10)) {                      //for single digit in front of next element with large number
                     tmpStr = tmpStr + strList.get(i + 1).toString();
                     strList.set(i, tmpStr);
                     strList.remove(i + 1);
                     removed++;
-                } else if (ifInt == 0) {
+                } else if (ifInt == 0) {                                //for single 0 in back of previous element with large number
                     tmpStr = strList.get(i-1).toString();
                     strList.set(i-1, tmpStr + tmpInt);
                     strList.remove(i);

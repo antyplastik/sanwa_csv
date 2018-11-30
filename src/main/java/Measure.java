@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-public class SANWAmeasure {
+public class Measure {
 
 
 

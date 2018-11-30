@@ -15,7 +15,7 @@ public class Runner {
         CSV sourceFile = new CSV(sourceFilePath,sourceFileName);
         CSV outputFile = new CSV(fixedFilePath,fixedFileName);
 
-        SANWAstringFix stringFix = new SANWAstringFix();
+        StringFix stringFix = new StringFix();
 
 //        System.out.println(stringFix.fixLine());
 
