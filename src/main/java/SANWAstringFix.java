@@ -23,6 +23,8 @@ public class SANWAstringFix {
         this.defaultSeparator = defaultSeparator;
     }
 
+    public char getDefaultSeparator() { return defaultSeparator; }
+
     public ArrayList<String> fixLine(ArrayList<String> inputArray) {
         ArrayList<String> tmpArray = new ArrayList<String>();
         int index = 0;

@@ -13,10 +13,10 @@ public class CSV {
 
     private File file;
 
-    private ArrayList<String> readedStringArray;
+    private ArrayList<String> outputStringArray;
 
 
-    public CSV(String filePath, String fileName, String osType) {
+    public CSV(String filePath, String fileName) {
         this.filePath = filePath;
         this.fileName = fileName;
 
@@ -35,8 +35,9 @@ public class CSV {
 
         try {
             bufferedReader = new BufferedReader(new FileReader(file));
+//            Scanner scanner = new Scanner(file);
             System.out.println("[INFO]\tFile found");
-            readedStringArray = new ArrayList<String>();
+            outputStringArray = new ArrayList<String>();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -44,30 +45,36 @@ public class CSV {
         }
     }
 
+    public BufferedReader getBufferedReader() {
+        return bufferedReader;
+    }
 
-    public ArrayList readFile() {
+    public ArrayList<String> readFile(BufferedReader bufferedReader) {
         String line = "";
         String tmpString;
-        SANWAstringFix fixStr = new SANWAstringFix();
+        int lineIndex = 0;
+//        SANWAstringFix fixStr = new SANWAstringFix();
         while (line != null) {
             try {
                 line = bufferedReader.readLine();
+
                 if (line != null) {
-                    readedStringArray.add(line);
+                    lineIndex++;
+                    outputStringArray.add(line);
                 }
             } catch (IOException e) {
                 System.out.println("[ERROR]\tCan't read file");
             }
         }
-        System.out.println("[INFO]\tFile readed");
+        System.out.println("[INFO]\tReaded "+ lineIndex + " lines from file");
         try {
             bufferedReader.close();
-            System.out.println("[INFO]\tReaded file was closed");
+            System.out.println("[INFO]\tFile was closed");
         } catch (IOException e) {
             e.printStackTrace();
             System.out.println("[ERROR]\tCan't close readed file");
         }
-        return readedStringArray;
+        return outputStringArray;
     }
 
     public void writeFile(ArrayList<String> listToWrite) {
