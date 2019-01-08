@@ -6,6 +6,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="sanwa_csv" />
         <module name="sanwa_csv_fix_&amp;_stats" />
       </profile>
     </annotationProcessing>
