@@ -25,40 +25,17 @@ public class FileWriter implements Writeable {
 
     public void setHardDefinedResourcesDir() throws URISyntaxException, IOException {
         Path path = Paths.get(getClass().getClassLoader().getResource(fileName).toURI());
-        //      /home/kamil/Workspace/JAVA_SDA/ChuckNorris/out/production/resources/jokesIDdb.txt
         resourcesDir = Arrays.stream(path.toString().split("/"))
                 .map(e -> !e.equals(fileName) ? e + "/" : "")
                 .collect(Collectors.joining())
         .replaceFirst(".$","");
 
         path = Paths.get(resourcesDir);
-        buildDirStructure(path);
     }
 
     public void setManualPathToDir(String resourcesDir) throws IOException {
         Path path = Paths.get(resourcesDir);
         this.resourcesDir = path.toString();
-        buildDirStructure(path);
-    }
-
-    private void buildDirStructure(Path path) throws IOException {
-        Path pathFile = Paths.get(path.toString() + "/" + fileName);
-        File file = new File(pathFile.toUri());
-        File dir = new File(path.toUri());
-
-        if (dir.exists())
-            System.out.println("[INFO] Directory exist " + path.toUri());
-        else {
-            System.out.println("[INFO] Directory created " + path.toUri());
-            Files.createDirectories(path);
-        }
-
-        if (file.exists())
-            System.out.println("[INFO] File already exist " + pathFile.toUri());
-        else {
-            Files.createFile(pathFile);
-            System.out.println("[INFO] File created " + path.toUri());
-        }
     }
 
     @Override

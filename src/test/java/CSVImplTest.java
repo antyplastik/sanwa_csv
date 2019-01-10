@@ -1,4 +1,5 @@
 import csv.CSVImpl;
+import csv.io.FileCreator;
 import csv.io.FileReader;
 import csv.io.FileWriter;
 import org.junit.Before;
@@ -28,6 +29,7 @@ public class CSVImplTest {
 
     public FileWriter fw;
     public FileReader fr;
+    public FileCreator fc;
 
     public CSVImpl fileHistory;
 
@@ -39,12 +41,10 @@ public class CSVImplTest {
 
     @Test
     public void checkCreatingADirectoryWithAFileTest() throws IOException {
-        Path filePath = Paths.get((testDirectory + "/" + testFile));
-        File file = new File(filePath.toUri());
-        File dir = new File(testDirectory);
-        fw.setManualPathToDir(testDirectory);
+        Path filePath = Paths.get(testDirectory);
+        fc = new FileCreator(filePath,testFile);
 
-        assertThat(file.exists(), is(true));
+        assertThat(fc.exists(), is(true));
     }
 
     @Test
@@ -52,11 +52,10 @@ public class CSVImplTest {
         fr.setManualPathToDir(testDirectory);
         String read = fr.read();
 
-        List<String> arrayList = new ArrayList<>();
-                arrayList = Arrays.stream(read.split("\n"))
+        List<String> arrayList = Arrays.stream(read.split("\n"))
                         .collect(Collectors.toList());
 
-        assertThat(read, is(notNullValue()));
+        assertThat(arrayList, is(notNullValue()));
     }
 
     @Ignore
