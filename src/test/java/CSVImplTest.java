@@ -6,13 +6,9 @@ import org.junit.Before;
 import org.junit.Ignore;
 import org.junit.Test;
 
-
-import java.io.File;
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -41,8 +37,7 @@ public class CSVImplTest {
 
     @Test
     public void checkCreatingADirectoryWithAFileTest() throws IOException {
-        Path filePath = Paths.get(testDirectory);
-        fc = new FileCreator(filePath, testFile);
+        fc = new FileCreator(testFile, Paths.get(testDirectory));
 
         assertThat(fc.exists(), is(true));
     }
@@ -81,13 +76,18 @@ public class CSVImplTest {
         String fileToDestroy = "testFile.txt";
         String fileToDestroyPath = "D:\\KP\\Workspace\\pliki_testowe";
 
-        Path filePath = Paths.get(fileToDestroyPath);
-        fc = new FileCreator(filePath, fileToDestroy);
+        fc = new FileCreator(fileToDestroy, Paths.get(fileToDestroyPath));
         boolean fileCreate = fc.create();
         boolean fileDestroy = fc.destroy();
 
         boolean result = fileCreate && fileDestroy ? true : false;
 
         assertThat(result, is(true));
+    }
+
+    @Ignore
+    @Test
+    public void CSVImplFunctionalTest(){
+
     }
 }

@@ -17,6 +17,11 @@ public class FileReader implements Readable<String> {
         this.fileName = fileName;
     }
 
+    public FileReader(String fileName, String resourcesDir) {
+        this.fileName = fileName;
+        setManualPathToDir(resourcesDir);
+    }
+
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }

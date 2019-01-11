@@ -1,8 +1,10 @@
 package csv;
 
+import java.io.IOException;
+
 public interface CSV <T> {
 
-   T read();
-   void write(T toWrite);
+   T read() throws IOException;
+   void write(T toWrite) throws IOException;
 
 }

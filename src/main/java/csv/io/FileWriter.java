@@ -19,6 +19,11 @@ public class FileWriter implements Writeable {
         this.fileName = fileName;
     }
 
+    public FileWriter(String fileName, String resourcesDir) throws IOException {
+        this.fileName = fileName;
+        setManualPathToDir(resourcesDir);
+    }
+
     public void setFileName(String fileName) {
         this.fileName = fileName;
     }

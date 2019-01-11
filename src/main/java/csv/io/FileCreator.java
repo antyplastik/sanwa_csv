@@ -12,7 +12,7 @@ public class FileCreator implements Creator {
     private String fileName;
     private File file;
 
-    public FileCreator(Path path, String fileName) {
+    public FileCreator(String fileName, Path path) {
         this.path = path;
         this.fileName = fileName;
         file = new File(path.toUri());
