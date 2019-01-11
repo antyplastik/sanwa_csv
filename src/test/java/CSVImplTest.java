@@ -42,7 +42,7 @@ public class CSVImplTest {
     @Test
     public void checkCreatingADirectoryWithAFileTest() throws IOException {
         Path filePath = Paths.get(testDirectory);
-        fc = new FileCreator(filePath,testFile);
+        fc = new FileCreator(filePath, testFile);
 
         assertThat(fc.exists(), is(true));
     }
@@ -53,7 +53,7 @@ public class CSVImplTest {
         String read = fr.read();
 
         List<String> arrayList = Arrays.stream(read.split("\n"))
-                        .collect(Collectors.toList());
+                .collect(Collectors.toList());
 
         assertThat(arrayList, is(notNullValue()));
     }
@@ -76,9 +76,18 @@ public class CSVImplTest {
         assertThat(read, is(equalTo(testString)));
     }
 
-    @Ignore
     @Test
-    public void checkDeletingTheDirectoryWithTheFileTest() {
+    public void checkDeletingTheDirectoryWithTheFileTest() throws IOException {
+        String fileToDestroy = "testFile.txt";
+        String fileToDestroyPath = "D:\\KP\\Workspace\\pliki_testowe";
 
+        Path filePath = Paths.get(fileToDestroyPath);
+        fc = new FileCreator(filePath, fileToDestroy);
+        boolean fileCreate = fc.create();
+        boolean fileDestroy = fc.destroy();
+
+        boolean result = fileCreate && fileDestroy ? true : false;
+
+        assertThat(result, is(true));
     }
 }

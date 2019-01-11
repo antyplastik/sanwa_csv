@@ -19,7 +19,8 @@ public class FileCreator implements Creator {
     }
 
     @Override
-    public void create() throws IOException {
+    public boolean create() throws IOException {
+        boolean created = false;
         Path pathFile = Paths.get(path.toString() + "/" + fileName);
         File file = new File(pathFile.toUri());
         File dir = new File(path.toUri());
@@ -29,6 +30,7 @@ public class FileCreator implements Creator {
         else {
             System.out.println("[INFO] Directory created " + path.toUri());
             Files.createDirectories(path);
+            created = true;
         }
 
         if (file.exists())
@@ -36,7 +38,9 @@ public class FileCreator implements Creator {
         else {
             Files.createFile(pathFile);
             System.out.println("[INFO] File created " + path.toUri());
+            created = true;
         }
+        return created;
     }
 
     @Override
@@ -45,9 +49,11 @@ public class FileCreator implements Creator {
     }
 
     @Override
-    public void destroy() {
-        File filePath = new File(path.toUri());
+    public boolean destroy() {
+        Path destroyPath = Paths.get(path.toString() + "/" + fileName);
+        File filePath = new File(destroyPath.toUri());
         boolean deleted = filePath.delete();
         System.out.println("[INFO] " + path.toUri() + " deleted: " + deleted);
+        return deleted;
     }
 }
