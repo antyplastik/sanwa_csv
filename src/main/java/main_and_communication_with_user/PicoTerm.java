@@ -16,6 +16,9 @@ public class PicoTerm implements Runnable {
     @Option(names = {"-s", "--save-file"}, description = "Save fixed text in the same file. By default, write to a new file")
     private boolean inputIsATextFlag;
 
+    @Option(names = {"-d", "--new-dir"}, description = "Creating a new directory for processed files; as a parameter, enter the path to an existing or new directory")
+    private String newDirPath;
+
     CSVImpl csv;
 
     @Override
