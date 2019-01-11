@@ -1,24 +1,22 @@
 package main_and_communication_with_user;
 
+import csv.CSVImpl;
 import picocli.CommandLine;
 import picocli.CommandLine.Option;
 import picocli.CommandLine.Parameters;
 
-@CommandLine.Command(name = "text_statistics", description = "The program to correct the data accidentally entered in the wrong columns by an error in the manufacturer's software.\n" +
+import java.io.IOException;
+
+@CommandLine.Command(name = "CSV Fixer for Sanwa PCLink", description = "The program to correct the data accidentally entered in the wrong columns by an error in the manufacturer's software.\n" +
         "Refers to Sanwa PC Link 7.", version = "v1.0")
 public class PicoTerm implements Runnable {
-    @CommandLine.Parameters(arity = "1..*", paramLabel = "FILE", description = "Input path to file(s) to process. D")
+    @CommandLine.Parameters(arity = "1..*", paramLabel = "FILE", description = "Input path to file(s) to process")
     private String[] inputParametersArgs;
 
-    @Option(names = {"-t", "--new-file"}, description = "Input is a text (or texts)")
+    @Option(names = {"-s", "--save-file"}, description = "Save fixed text in the same file. By default, write to a new file")
     private boolean inputIsATextFlag;
 
-    @Option(names = {"-f", "--file"}, description = "Input is a file (or files)")
-    private boolean inputIsAFileFlag;
-
-    @Option(names = {"-h", "--help"}, usageHelp = true, description = "display a help message")
-    private boolean helpRequestedFlag;
-
+    CSVImpl csv;
 
     @Override
     public void run(){

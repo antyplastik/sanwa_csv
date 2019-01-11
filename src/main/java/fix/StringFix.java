@@ -9,12 +9,12 @@ public class StringFix {
     private ArrayList<String> outputArray;
 
     public StringFix() {
-        this.outputArray = new ArrayList<String>();
+        this.outputArray = new ArrayList<>();
     }
 
     public StringFix(String inputString) {
         this.inputString = inputString;
-        this.outputArray = new ArrayList<String>();
+        this.outputArray = new ArrayList<>();
     }
 
     public void setInputString(String inputString) {
@@ -65,12 +65,11 @@ public class StringFix {
     }
 
     // 00:00:00,5,440000,DCmV,,,2,3700000,oC,,,,,,measures.Measure,,,,Current peak values,,
-    private ArrayList<String> parseLine(String inputString) {
+    private ArrayList<String> parseLine(String inputString) {       // dzieli string na liste a separatorem jest przecinek
         ArrayList<String> arrayList = new ArrayList<String>();
         String tmpStr = "";
         int strLen = inputString.length();
         int comma = 0;
-        int strIndex = 0;
         char currentChar;
 
         for (int i = 0; i < strLen; i++) {
@@ -92,7 +91,7 @@ public class StringFix {
         return arrayList;
     }
 
-    private ArrayList<String> fixLineList(ArrayList strList) {
+    private ArrayList<String> fixLineList(ArrayList strList) {          // scala pojedyncze cyfry z reszta cyfry ktora znajduje sie w innej kolumnie
         int listLen = strList.size();
         int tmpInt = 0;
         String tmpStr = "";
@@ -146,7 +145,7 @@ public class StringFix {
     }
 
 
-    public String getFixedLine(ArrayList arrayList) {
+    public String getFixedLine(ArrayList arrayList) {           // scala liste w string
         int arrlen = arrayList.size();
         String resultStr = "";
         String currentStr = "";
