@@ -1,12 +1,15 @@
 package fix;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class StringFix {
-    private char defaultSeparator = ',';
+    private String defaultSeparator = ",";
     String inputString;
 
-    private ArrayList<String> outputArray;
+    private List<String> outputArray;
 
     public StringFix() {
         this.outputArray = new ArrayList<>();
@@ -21,115 +24,79 @@ public class StringFix {
         this.inputString = inputString;
     }
 
-    public void setDefaultSeparator(char defaultSeparator) {
+    public void setDefaultSeparator(String defaultSeparator) {
         this.defaultSeparator = defaultSeparator;
     }
 
-    public char getDefaultSeparator() { return defaultSeparator; }
-
-    public ArrayList<String> fixLine(ArrayList<String> inputArray) {
-        ArrayList<String> tmpArray = new ArrayList<String>();
-        int index = 0;
-        String inputLine;
-
-        do {
-            inputLine = inputArray.get(index);
-//            outputArray.add(getFixedLine(fixLineList(parseLine(inputLine))));
-
-            tmpArray = parseLine(inputLine);
-            tmpArray = fixLineList(tmpArray);
-            outputArray.add(getFixedLine(tmpArray));
-            System.out.println(index + ": " + inputLine);
-            index++;
-
-        } while (inputArray.get(index + 1).charAt(0) != ',');
-
-        outputArray = tmpArray;
-        System.out.println("Done!");
-        return outputArray;
+    public String getDefaultSeparator() {
+        return defaultSeparator;
     }
 
     public String fixLine() {
         String result = "";
         if (inputString != null || inputString != "") {
-            result = getFixedLine(fixLineList(parseLine(inputString)));
+            result = getFixedLine(mergingSingleDigitsWithTheRestOfTheNumber(lineToList(inputString)));
             return result;
-        }
-        else
+        } else
             return "[ERROR] Input string is empty";
     }
 
-    public ArrayList<String> getOutputArray() {
+    public List<String> getOutputArray() {
         System.out.println("[INFO]\tGet output array");
         return outputArray;
     }
 
     // 00:00:00,5,440000,DCmV,,,2,3700000,oC,,,,,,measures.Measure,,,,Current peak values,,
-    private ArrayList<String> parseLine(String inputString) {       // dzieli string na liste a separatorem jest przecinek
-        ArrayList<String> arrayList = new ArrayList<String>();
-        String tmpStr = "";
-        int strLen = inputString.length();
-        int comma = 0;
-        char currentChar;
-
-        for (int i = 0; i < strLen; i++) {
-            currentChar = inputString.charAt(i);
-            if (currentChar == defaultSeparator) {
-                arrayList.add(tmpStr);
-                comma++;
-                tmpStr = "";
-//                if(i !=1)
-//                    tmpStr = "";
-            } else
-                tmpStr = tmpStr + currentChar;
-
-        }
-
-
+    private List<String> lineToList(String inputString) {       // dzieli string na liste a separatorem jest przecinek
+        List<String> arrayList = Arrays.stream(inputString.split(defaultSeparator)).collect(Collectors.toList());
 //        System.out.println(comma); // 20 jest prawidlowo
-
         return arrayList;
     }
 
-    private ArrayList<String> fixLineList(ArrayList strList) {          // scala pojedyncze cyfry z reszta cyfry ktora znajduje sie w innej kolumnie
+    private List<String> removeEmptyLines(List<String> strList) {
         int listLen = strList.size();
-        int tmpInt = 0;
-        String tmpStr = "";
-        String nextStr = "";
-        String nextAfterNextStr = "";
         int removed = 0;
-        int ifInt;
-//        ArrayList<String> result = new ArrayList<String>();
 
         for (int i = 0; i < listLen - removed; i++) {
-            tmpStr = strList.get(i).toString();
-            if (tmpStr.equals("")) {
+            String actual = strList.get(i);
+            String next = null;
+            if (actual.equals("")) {
                 do {
                     strList.remove(i);
                     removed++;
-                    if (i < (listLen - removed) - 1)
-                        nextStr = strList.get(i).toString();
-                } while (nextStr.equals(""));
+                    if (i < listLen - 1)
+                        next = strList.get(i);
+                } while (next.equals(""));
             }
+        }
+        return strList;
+    }
 
-            if (i < listLen - removed) {
-                tmpStr = strList.get(i).toString();
-                ifInt = getNumberFromString(tmpStr);
+    private List<String> mergingSingleDigitsWithTheRestOfTheNumber(List<String> strList) {          // scala pojedyncze cyfry z reszta cyfry ktora znajduje sie w innej kolumnie
+        int tmpInt = 0;
+        String tmpStr = "";
+        int ifInt;
 
-                if ((ifInt > 0) && (ifInt < 10)) {                      //for single digit in front of next element with large number
-                    tmpStr = tmpStr + strList.get(i + 1).toString();
-                    strList.set(i, tmpStr);
-                    strList.remove(i + 1);
-                    removed++;
-                } else if (ifInt == 0) {                                //for single 0 in back of previous element with large number
-                    tmpStr = strList.get(i-1).toString();
-                    strList.set(i-1, tmpStr + tmpInt);
-                    strList.remove(i);
-                    removed++;
-                }
+        strList = removeEmptyLines(strList);
+
+        int listLen = strList.size();
+        int removed = 0;
+
+        for (int i = 0; i < listLen - removed; i++) {
+            tmpStr = strList.get(i);
+            ifInt = getNumberFromString(tmpStr);
+
+            if ((ifInt > 0) && (ifInt < 10)) {                      //for single digit in front of next element with large number
+                tmpStr = tmpStr + strList.get(i + 1);
+                strList.set(i, tmpStr);
+                strList.remove(i + 1);
+                removed++;
+            } else if (ifInt == 0) {                                //for single 0 in back of previous element with large number
+                tmpStr = strList.get(i - 1);
+                strList.set(i - 1, tmpStr + tmpInt);
+                strList.remove(i);
+                removed++;
             }
-//            if ((i < (listLen - removed) -1) && tmpStr.equals(','))
-//                strList.add(i+1, defaultSeparator);;
         }
         return strList;
     }
@@ -145,20 +112,8 @@ public class StringFix {
     }
 
 
-    public String getFixedLine(ArrayList arrayList) {           // scala liste w string
-        int arrlen = arrayList.size();
-        String resultStr = "";
-        String currentStr = "";
-
-        for (int i = 0; i < arrlen; i++) {
-            currentStr = arrayList.get(i).toString();
-            if (i > 0)
-                resultStr = resultStr + defaultSeparator + currentStr;
-            else if (i == 0)
-                resultStr = currentStr;
-        }
-
-        return resultStr;
+    public String getFixedLine(List<String> arrayList) {           // scala liste w string
+        return arrayList.stream().map(x -> x + defaultSeparator).collect(Collectors.joining()).replaceFirst(".$","");
     }
 
 }

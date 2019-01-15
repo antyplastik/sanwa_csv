@@ -1,19 +1,13 @@
 package measures;
 
-import java.util.ArrayList;
+import org.joda.time.LocalTime;
+import java.util.List;
 
 public class Measure {
 
+    private long no;
+    private LocalTime time;
 
-
-}
-
-class SANWAchannel{
-
-
-
-}
-
-enum ChannelType{
-
+    private List<Channel> channels;
+    private Channel channel;
 }

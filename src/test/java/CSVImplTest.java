@@ -21,7 +21,7 @@ import static org.junit.Assert.*;
 public class CSVImplTest {
 
     public String testFile = "test_file.csv";
-    public String testDirectory = "D:\\KP\\Workspace\\Java\\sanwa_csv\\src\\resources";
+    public String testDirectory = "D:\\KP\\Workspace\\Java\\sanwa_csv\\src\\test\\resources";
 
     public FileWriter fw;
     public FileReader fr;
